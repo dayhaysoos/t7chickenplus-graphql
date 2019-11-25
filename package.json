@@ -1,0 +1,17 @@
+{
+  "name": "t7chicken-graphql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-lambda": "^2.9.12",
+    "dotenv": "^8.2.0",
+    "faunadb": "^2.9.4"
+  }
+}
