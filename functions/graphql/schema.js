@@ -4,9 +4,11 @@ exports.typeDefs = gql`
   type Query {
     hello: String!
     allCharacter: [Character]!
+    characterMoves(filter: String!): Character
+    characterMove(filter: String!, move_id: String!): Move
   }
 
-  type MoveList {
+  type Move {
     preview_url: String
     move_name: String
     notation: String
@@ -36,6 +38,24 @@ exports.typeDefs = gql`
     fullName: String!
     displayName: String!
     label: String!
-    movelist: [MoveList]
+    movelist: [Move]
+  }
+
+  input CharacterLabel {
+    label: String!
+  }
+
+  input MoveInput {
+    id: String!
+    on_block: String!
+  }
+
+  type Mutation {
+    updateCharacterMove(
+      label: String!
+      moveId: String!
+      property: String!
+      value: String!
+    ): Move
   }
 `;
