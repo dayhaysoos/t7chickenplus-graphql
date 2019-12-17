@@ -1,8 +1,8 @@
 # example netlify.toml
 [build]
-  command = "# no build command"
+  command = "yarn workspace t7chicken.com build"
   functions = "functions"
-  publish = "."
+  publish = "site/t7chicken.com/public"
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app. 
   ## Not needed for static site generators.
@@ -13,9 +13,11 @@
   
   ## (optional) Settings for Netlify Dev
   ## https://github.com/netlify/cli/blob/master/docs/netlify-dev.md#project-detection
-  #[dev] 
-  #  command = "yarn start" # Command to start your dev server
-  #  port = 3000 # Port that the dev server will be listening on
-  #  publish = "dist" # Folder with the static content for _redirect file
+  [dev] 
+   command = "yarn workspace t7chicken.com start" # Command to start your dev server
+   port = 8000 # Port that the dev server will be listening on
+   targetPort = 8000
+   functionsPort = 34567
+   publish = "site/t7chicken.com/public" # Folder with the static content for _redirect file
   
   ## more info on configuring this file: https://www.netlify.com/docs/netlify-toml-reference/ 

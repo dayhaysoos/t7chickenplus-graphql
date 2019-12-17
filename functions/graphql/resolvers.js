@@ -1,7 +1,7 @@
 exports.resolvers = {
   Query: {
     hello: (obj, args, context) => {
-      return "Hello, file-seperated world!";
+      return "Testing";
     },
     allCharacter: (obj, args, context) => {
       const { client, query: q } = context;

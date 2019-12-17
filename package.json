@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "netlify dev"
@@ -10,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "workspaces": [
+    "site/t7chicken.com"
+  ],
   "dependencies": {
     "apollo-server-lambda": "^2.9.12",
     "dotenv": "^8.2.0",
