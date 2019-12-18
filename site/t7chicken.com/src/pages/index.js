@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
@@ -11,6 +11,7 @@ const allCharacters = gql`
   {
     allCharacter {
       displayName
+      label
     }
   }
 `
@@ -24,8 +25,10 @@ const IndexPage = () => {
         {loading && <p>Loading characters ... </p>}
         {data &&
           data.allCharacter &&
-          data.allCharacter.map(({ displayName }) => (
-            <li key={displayName}>{displayName}</li>
+          data.allCharacter.map(({ displayName, label }) => (
+            <li key={displayName}>
+              <Link to={`/${label}/`}>{displayName}</Link>
+            </li>
           ))}
       </ul>
     </Layout>

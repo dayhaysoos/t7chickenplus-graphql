@@ -7,6 +7,31 @@ exports.createPages = async ({ actions, graphql }) => {
         allCharacter {
           displayName
           label
+          movelist {
+            preview_url
+            move_name
+            notation
+            hit_level
+            range
+            pushback
+            tracking
+            crush
+            jail
+            natural
+            environmental
+            cancelable
+            meter_gain
+            damage
+            speed
+            on_block
+            on_hit
+            on_ch
+            on_whiff
+            in_air
+            active_frames
+            notes
+            id
+          }
         }
       }
     }
