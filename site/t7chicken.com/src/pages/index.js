@@ -16,13 +16,14 @@ const allCharacters = gql`
 `
 
 const IndexPage = () => {
-  const { data, error, loading } = useQuery(allCharacters)
-  console.log('loading', loading)
+  const { data = [], error, loading } = useQuery(allCharacters)
   return (
     <Layout>
       <SEO title="Home" />
       <ul>
-        {!loading &&
+        {loading && <p>Loading characters ... </p>}
+        {data &&
+          data.allCharacter &&
           data.allCharacter.map(({ displayName }) => (
             <li key={displayName}>{displayName}</li>
           ))}
