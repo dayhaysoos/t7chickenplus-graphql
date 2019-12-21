@@ -1,9 +1,10 @@
 /**@jsx jsx */
+import React from 'react'
 import { jsx } from 'theme-ui'
-import { useState } from 'react'
+import { useState, useMemo, Fragment } from 'react'
 import Layout from '../components/layout'
-import Image from '../components/image'
 import SEO from '../components/seo'
+import Table from '../components/table'
 
 const Modal = props => (
   <div
@@ -37,12 +38,12 @@ const ModalContent = props => (
   />
 )
 
-const Table = props => (
-  <table
+const Span = props => (
+  <span
+    {...props}
     sx={{
       display: 'block',
     }}
-    {...props}
   />
 )
 
@@ -51,6 +52,65 @@ const Character = ({ pageContext }) => {
     isHovering: false,
     preview_url: '',
   })
+
+  const moveData = useMemo(() => pageContext.characterData.movelist, [])
+
+  const columns = React.useMemo(() => [
+    {
+      Header: pageContext.characterData.displayName,
+      columns: [
+        {
+          Header: 'Notation',
+          Cell: ({ cell: { value } }) => (
+            <Fragment>
+              <Span>{value.notation}</Span>
+              <Span>{value.move_name}</Span>
+              {value.preview_url && (
+                <a
+                  href={''}
+                  sx={{ zIndex: 1 }}
+                  onClick={e => {
+                    e.preventDefault()
+                    setHoverState({
+                      isHovering: true,
+                      preview_url: value.preview_url,
+                    })
+                  }}
+                >
+                  View Gif!
+                </a>
+              )}
+            </Fragment>
+          ),
+          accessor: notation => notation,
+        },
+        {
+          Header: 'Hit Level',
+          accessor: 'hit_level',
+        },
+        {
+          Header: 'Damage',
+          accessor: 'damage',
+        },
+        {
+          Header: 'Speed',
+          accessor: 'speed',
+        },
+        {
+          Header: 'On Block',
+          accessor: 'on_block',
+        },
+        {
+          Header: 'On Hit',
+          accessor: 'on_hit',
+        },
+        {
+          Header: 'On Counter Hit',
+          accessor: 'on_ch',
+        },
+      ],
+    },
+  ])
 
   return (
     <Layout>
@@ -64,63 +124,7 @@ const Character = ({ pageContext }) => {
           <img sx={{ height: '50%' }} src={hoverState.preview_url} />
         </ModalContent>
       </Modal>
-      <Table>
-        <caption>{pageContext.characterData.displayName} Frame Data</caption>
-        <thead sx={{ position: 'sticky', backgroundColor: 'white' }}>
-          <tr>
-            <th scope="col">Notation</th>
-            <th scope="col">Hit Level</th>
-            <th scope="col">Damage</th>
-            <th scope="col">Speed</th>
-            <th scope="col">On Block</th>
-            <th scope="col">On Hit</th>
-            <th scope="col">On CH</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pageContext.characterData.movelist.map(
-            ({
-              notation,
-              preview_url,
-              move_name,
-              hit_level,
-              damage,
-              speed,
-              on_block,
-              on_hit,
-              on_ch,
-              id,
-            }) => (
-              <tr key={id}>
-                <th scope="row">
-                  <div>{move_name && <p>{move_name}</p>}</div>
-                  <p>{notation}</p>
-                  <div>
-                    {preview_url && (
-                      <a
-                        href={''}
-                        sx={{ zIndex: 1 }}
-                        onClick={e => {
-                          e.preventDefault()
-                          setHoverState({ isHovering: true, preview_url })
-                        }}
-                      >
-                        View gif
-                      </a>
-                    )}
-                  </div>
-                </th>
-                <td>{hit_level}</td>
-                <td>{damage}</td>
-                <td>{speed}</td>
-                <td>{on_block}</td>
-                <td>{on_hit}</td>
-                <td>{on_ch}</td>
-              </tr>
-            )
-          )}
-        </tbody>
-      </Table>
+      <Table columns={columns} data={moveData} />
     </Layout>
   )
 }
