@@ -25,6 +25,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
+    "react-table": "^7.0.0-rc.15",
     "theme-ui": "^0.2.52"
   },
   "devDependencies": {
