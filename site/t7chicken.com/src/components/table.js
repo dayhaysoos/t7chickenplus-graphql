@@ -1,41 +1,70 @@
 /**@jsx jsx */
+import { useMemo } from 'react'
 import { jsx } from 'theme-ui'
-import { useTable } from 'react-table'
+import { useTable, useFlexLayout } from 'react-table'
+import ReactTable from 'react-table'
 
 const Table = props => (
-  <table
+  <div
     {...props}
     sx={{
       borderSpacing: 0,
       border: '1px solid black',
+      display: 'block',
+      overflow: 'auto',
+      height: '400px',
     }}
   />
 )
 
 const Thead = props => (
-  <thead
+  <div
     {...props}
     sx={{
       '&:last-child': {
-        borderBottom: 0,
+        display: 'block',
       },
     }}
   />
 )
 
 const Td = props => (
-  <td
+  <div
     {...props}
     sx={{
       margin: 0,
       padding: '0.5 rem',
       borderBottom: '1px solid black',
       borderRight: '1px solid black',
+      position: 'relative',
     }}
   />
 )
 
-const Th = props => <th {...props} sx={{ border: '1px solid black' }} />
+const Th = props => (
+  <div
+    {...props}
+    sx={{
+      margin: 0,
+      padding: '0.5 rem',
+      borderBottom: '1px solid black',
+      borderRight: '1px solid black',
+      position: 'relative',
+    }}
+  />
+)
+
+const Tbody = props => (
+  <div
+    {...props}
+    sx={{
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      width: '100%',
+      height: '400px',
+    }}
+  />
+)
 
 const CharacterTable = ({ columns, data }) => {
   const {
@@ -44,77 +73,51 @@ const CharacterTable = ({ columns, data }) => {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({
-    columns,
-    data,
-  })
+  } = useTable(
+    {
+      columns,
+      data,
+    },
+    useFlexLayout
+  )
+
+  const Tr = props => (
+    <div
+      {...props}
+      sx={{
+        minWidth: '180px',
+        width: '100%',
+      }}
+    />
+  )
 
   return (
     <Table {...getTableProps()}>
-      <Thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <Th {...column.getHeaderProps()}>{column.render('Header')}</Th>
-            ))}
-          </tr>
-        ))}
-      </Thead>
-      <tbody {...getTableBodyProps()}>
+      <div>
+        <Thead>
+          {headerGroups.map(headerGroup => (
+            <Tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <Th {...column.getHeaderProps()}>{column.render('Header')}</Th>
+              ))}
+            </Tr>
+          ))}
+        </Thead>
+      </div>
+      <Tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
           prepareRow(row)
           return (
-            <tr {...row.getRowProps()}>
+            <Tr {...row.getRowProps()}>
               {row.cells.map((cell, i) => {
                 return <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
               })}
-            </tr>
+            </Tr>
           )
         })}
-      </tbody>
+      </Tbody>
     </Table>
   )
 }
-
-// const Table = ({ columns, data }) => {
-//   // Use the state and functions returned from useTable to build your UI
-//   const {
-//     getTableProps,
-//     getTableBodyProps,
-//     headerGroups,
-//     rows,
-//     prepareRow,
-//   } = useTable({
-//     columns,
-//     data,
-//   })
-
-//   // Render the UI for your table
-//   return (
-//     <table {...getTableProps()}>
-//       <thead>
-//         {headerGroups.map(headerGroup => (
-//           <tr {...headerGroup.getHeaderGroupProps()}>
-//             {headerGroup.headers.map(column => (
-//               <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-//             ))}
-//           </tr>
-//         ))}
-//       </thead>
-//       <tbody {...getTableBodyProps()}>
-//         {rows.map((row, i) => {
-//           prepareRow(row)
-//           return (
-//             <tr {...row.getRowProps()}>
-//               {row.cells.map(cell => {
-//                 return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-//               })}
-//             </tr>
-//           )
-//         })}
-//       </tbody>
-//     </table>
-//   )
-// }
 
 export default CharacterTable
