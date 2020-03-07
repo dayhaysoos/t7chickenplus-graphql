@@ -1,122 +1,135 @@
 /**@jsx jsx */
-import { useMemo } from 'react'
-import { jsx } from 'theme-ui'
-import { useTable, useFlexLayout } from 'react-table'
+import { useState } from 'react'
+import { jsx, Grid, Box, Flex } from 'theme-ui'
 import ReactTable from 'react-table'
 
-const Table = props => (
+const Modal = props => (
   <div
-    {...props}
     sx={{
-      borderSpacing: 0,
-      border: '1px solid black',
-      display: 'block',
-      overflow: 'auto',
-      height: '400px',
-    }}
-  />
-)
-
-const Thead = props => (
-  <div
-    {...props}
-    sx={{
-      '&:last-child': {
-        display: 'block',
-      },
-    }}
-  />
-)
-
-const Td = props => (
-  <div
-    {...props}
-    sx={{
-      margin: 0,
-      padding: '0.5 rem',
-      borderBottom: '1px solid black',
-      borderRight: '1px solid black',
-      position: 'relative',
-    }}
-  />
-)
-
-const Th = props => (
-  <div
-    {...props}
-    sx={{
-      margin: 0,
-      padding: '0.5 rem',
-      borderBottom: '1px solid black',
-      borderRight: '1px solid black',
-      position: 'relative',
-    }}
-  />
-)
-
-const Tbody = props => (
-  <div
-    {...props}
-    sx={{
-      overflowY: 'scroll',
-      overflowX: 'hidden',
+      display: props.ishovering === 'true' ? 'block' : 'none',
+      position: 'fixed',
+      zIndex: 2,
+      left: 0,
+      top: 0,
       width: '100%',
-      height: '400px',
+      overflow: 'auto',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+    }}
+    {...props}
+  />
+)
+
+const ModalContent = props => (
+  <div
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: '15% auto',
+      width: '100%',
+      height: '100%',
+      transition: 'all 1s',
+      animation: 'fade-in 1s',
+    }}
+    {...props}
+  />
+)
+
+const Cell = props => (
+  <Box
+    {...props}
+    sx={{
+      border: '1px solid black',
+      textAlign: 'center',
+      padding: 2,
+    }}
+  />
+)
+
+const Header = props => (
+  <Box
+    {...props}
+    sx={{
+      border: '1px solid black',
+      textAlign: 'center',
+      fontSize: '18px',
+      fontWeight: 'bold',
     }}
   />
 )
 
 const CharacterTable = ({ columns, data }) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable(
-    {
-      columns,
-      data,
-    },
-    useFlexLayout
-  )
-
-  const Tr = props => (
-    <div
-      {...props}
-      sx={{
-        minWidth: '180px',
-        width: '100%',
-      }}
-    />
-  )
+  const [hoverState, setHoverState] = useState({
+    isHovering: false,
+    preview_url: '',
+  })
 
   return (
-    <Table {...getTableProps()}>
-      <div>
-        <Thead>
-          {headerGroups.map(headerGroup => (
-            <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <Th {...column.getHeaderProps()}>{column.render('Header')}</Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-      </div>
-      <Tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <Tr {...row.getRowProps()}>
-              {row.cells.map((cell, i) => {
-                return <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
-              })}
-            </Tr>
+    <div>
+      <h1 sx={{ textAlign: 'center' }}>{columns[0].Header}</h1>
+      <Modal
+        ishovering={hoverState.isHovering.toString()}
+        onClick={() => setHoverState({ isHovering: false })}
+      >
+        <ModalContent>
+          <img sx={{ height: '50%' }} src={hoverState.preview_url} />
+        </ModalContent>
+      </Modal>
+      <Grid gap={0} columns={columns[0].columns.length}>
+        {columns[0].columns.map(cell => (
+          <Header key={cell.accessor}>{cell.Header}</Header>
+        ))}
+      </Grid>
+      <Box>
+        {data.map(
+          (
+            {
+              notation,
+              hit_level,
+              damage,
+              speed,
+              on_block,
+              on_hit,
+              on_ch,
+              preview_url,
+            },
+            i
+          ) => (
+            <Grid
+              sx={{ backgroundColor: i % 2 === 0 ? 'white' : 'lightgray' }}
+              gap={0}
+              key={notation}
+              columns={columns[0].columns.length}
+            >
+              <Cell>
+                {notation}
+                {preview_url && (
+                  <a
+                    href={''}
+                    sx={{ display: 'block', zIndex: 1 }}
+                    onClick={e => {
+                      e.preventDefault()
+                      setHoverState({
+                        isHovering: true,
+                        preview_url: preview_url,
+                      })
+                    }}
+                  >
+                    View Gif!
+                  </a>
+                )}
+              </Cell>
+              <Cell>{hit_level}</Cell>
+              <Cell>{damage}</Cell>
+              <Cell>{speed}</Cell>
+              <Cell>{on_block}</Cell>
+              <Cell>{on_hit}</Cell>
+              <Cell>{on_ch}</Cell>
+            </Grid>
           )
-        })}
-      </Tbody>
-    </Table>
+        )}
+      </Box>
+    </div>
   )
 }
 
