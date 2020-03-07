@@ -15,8 +15,8 @@
     "site/t7chicken.com"
   ],
   "dependencies": {
-    "apollo-server-lambda": "^2.9.12",
+    "apollo-server-lambda": "^2.11.0",
     "dotenv": "^8.2.0",
-    "faunadb": "^2.9.4"
+    "faunadb": "^2.11.1"
   }
 }
