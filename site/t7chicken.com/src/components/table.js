@@ -75,7 +75,11 @@ const CharacterTable = ({ columns, data }) => {
           <img sx={{ height: '50%' }} src={hoverState.preview_url} />
         </ModalContent>
       </Modal>
-      <Grid gap={0} columns={columns[0].columns.length}>
+      <Grid
+        sx={{ position: 'sticky', top: 0, backgroundColor: 'white' }}
+        gap={0}
+        columns={columns[0].columns.length}
+      >
         {columns[0].columns.map(cell => (
           <Header key={cell.accessor}>{cell.Header}</Header>
         ))}
