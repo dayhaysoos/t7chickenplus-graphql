@@ -1,24 +1,12 @@
 /**@jsx jsx */
-import { jsx, Box, Button, Flex } from 'theme-ui'
-import { useEffect, useState } from 'react'
+import { jsx, Box, Button, Flex, NavLink } from 'theme-ui'
+import { useContext } from 'react'
 import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
-import netlifyIdentity from 'netlify-identity-widget'
+import { IdentityContext } from '../context/identity-context'
 
 const Header = ({ siteTitle }) => {
-  const [user, setUser] = useState()
-  useEffect(() => {
-    netlifyIdentity.init({})
-  })
-
-  netlifyIdentity.on('login', user => {
-    netlifyIdentity.close()
-    setUser(user)
-  })
-
-  netlifyIdentity.on('logout', () => setUser())
-
-  console.log(netlifyIdentity.currentUser())
+  const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   return (
     <header
       style={{
@@ -33,7 +21,7 @@ const Header = ({ siteTitle }) => {
           padding: `1.45rem 1.0875rem`,
         }}
       >
-        <Flex as="nav">
+        <Flex sx={{ alignItems: 'center' }} as="nav">
           <NavLink as={Link} to={'/'} p={2}>
             Home
           </NavLink>
@@ -55,7 +43,7 @@ const Header = ({ siteTitle }) => {
               >
                 Log out
               </Button>
-              <p sx={{ p: 2 }}>{user.user_metadata.full_name}</p>
+              <span sx={{ p: 2 }}>{user.user_metadata.full_name}</span>
             </Flex>
           )}
         </Flex>
