@@ -37,7 +37,7 @@ module.exports = {
       options: {
         typeName: 'T7CHICKEN',
         fieldName: 't7chicken',
-        url: 'https://t7chickenplus.netlify.com/.netlify/functions/graphql',
+        url: 'https://t7chickenplus.netlify.app/.netlify/functions/graphql',
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
